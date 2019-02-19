@@ -6,7 +6,7 @@ import grammarUnit from "./grammar-unit-compiled";
 import { IReport, IReportItemRegions } from "./parser.d";
 export { IReport, IReportItemRegions };
 
-const parseReport = async (reportData: string): Promise<IReport | undefined> => {
+export const parseReport = async (reportData: string): Promise<IReport | undefined> => {
   return new Promise((resolve, reject) => {
     try {
       setTimeout(() => {
