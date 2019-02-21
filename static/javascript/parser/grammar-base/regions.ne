@@ -12,7 +12,7 @@
   };
 
   const regionProcessor = (d) => {
-    const exits = d[12].reduce((result, exit) => {
+    const exits = d[14].reduce((result, exit) => {
       result[exit.direction.toLowerCase()] = exit;
       return result;
     }, {});
@@ -36,6 +36,7 @@
       regions: d[0]
     };
   };
+
 %}
 
 
@@ -47,24 +48,33 @@ FACTION_REGIONS ->
 
 
 FACTION_REGION ->
-  TEXT _ REGION_COORDINATES _ SENTENCE NL
-  "------------------------------------------------------------" NL
+  WORD _ REGION_COORDINATES _ SENTENCE NL
+  "-":+ NL_
+  FACTION_REGION_DESCRIPTION:?
+  NL_
   FACTION_REGION_DETAILS:+
   NL_
   "Exits:" NL
-  FACTION_REGION_EXIT:+
+  FACTION_REGION_EXITS
   NL_
   FACTION_REGION_GATE:?
   FACTION_REGION_UNIT:*
   {% regionProcessor %}
 
 
-FACTION_REGION_DETAILS ->
-  _ _:? REGION_SENTENCE NL {% array2String %}
+FACTION_REGION_DESCRIPTION ->
+  _:+ TEXT
 
+FACTION_REGION_DETAILS ->
+#  "Wages:" _ "$" INT _ "(Max:" _ INT ")."
+  _:+ REGION_SENTENCE NL {% array2String %}
+
+FACTION_REGION_EXITS ->
+  __ "none" NL {% (d) => { return []; } %}
+  | FACTION_REGION_EXIT:+
 
 FACTION_REGION_EXIT ->
-  _ _:? WORD _ ":" _ WORD _ REGION_COORDINATES _ REGION_SENTENCE NL {% regionExitProcessor  %}
+  _ _:? WORD _ ":" _ WORD _ REGION_COORDINATES _ REGION_SENTENCE NL {% regionExitProcessor %}
 
 
 FACTION_REGION_GATE ->

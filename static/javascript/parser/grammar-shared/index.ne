@@ -45,7 +45,8 @@
 
 
 NL ->
-  [\n] {% noop %}
+  [\r] [\n] {% noop %}
+  | [\n] {% noop %}
 
 
 NL_ ->
@@ -102,7 +103,7 @@ LC_WORD ->
 
 
 REGION_Z_LEVEL ->
-  ",nexus" {% (d) => ({ title: d[0], z: 0 }) %}
+  ",0 <nexus>" {% (d) => ({ title: d[0], z: 0 }) %}
   | null {% (d) => ({ title: "", z: 1 }) %}
 
   #Underworld
